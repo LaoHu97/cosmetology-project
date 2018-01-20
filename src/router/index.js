@@ -4,6 +4,7 @@ import Index from '@/views/Index'
 import Details from '@/views/Details'
 import Payment from '@/views/Payment'
 import Order from '@/views/Order'
+import Introduce from '@/views/Introduce'
 
 Vue.use(Router)
 
@@ -32,6 +33,12 @@ export default new Router({
       name: 'Order',
       component: Order,
       meta: { navShow: true, cname: '订单' }
+    },
+    {
+      path: '/introduce',
+      name: 'Introduce',
+      component: Introduce,
+      meta: { navShow: true, cname: '介绍' }
     }
   ]
 })

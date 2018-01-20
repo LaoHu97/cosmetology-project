@@ -6,15 +6,15 @@
   <tabbar style="position:fixed" v-show="$route.meta.navShow">
     <tabbar-item link="/" :selected="$route.path == '/'">
       <i slot="icon" class="iconfont">&#xe702;</i>
-      <span slot="label">首页</span>
+      <span slot="label">套餐</span>
     </tabbar-item>
-    <tabbar-item link="/order" :selected="$route.path == '/order'">
+    <tabbar-item link="/introduce" :selected="$route.path == '/introduce'">
       <i slot="icon" class="iconfont">&#xe6e7;</i>
-      <span slot="label">订单</span>
+      <span slot="label">介绍</span>
     </tabbar-item>
   </tabbar>
   <div v-transfer-dom>
-    <loading :show="show" text="Loading"></loading>
+    <loading :show="show" text="请稍后"></loading>
   </div>
 </div>
 </template>
@@ -47,9 +47,6 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   height: 100%;
 }

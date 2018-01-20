@@ -3,10 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-
-import { LoadingPlugin } from 'vux'
+import { ToastPlugin, LoadingPlugin } from 'vux'
 Vue.use(LoadingPlugin)
-
+Vue.use(ToastPlugin)
 Vue.config.productionTip = false
 
 const FastClick = require('fastclick')

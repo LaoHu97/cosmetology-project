@@ -4,62 +4,167 @@
       <x-header>套餐详情</x-header>
     </div>
     <div class="top_img">
-      <img v-if="imgUrl" :src="imgUrl" alt="" width="100%">
+      <swiper :list="demo01_list" dots-position="center" loop auto></swiper>
     </div>
     <div class="box_title">
       <div style="padding: 0 15px;">
-        <span>商品名称巴拉巴拉</span>
-        <span style="float:right">销量：88</span>
-        <div class="box_price">现价：88.00元<span>原价：100.00元</span></div>
+        <span>{{pkgProduct.pkg_name}}</span>
+        <span style="float:right">销量：{{pkgProduct.sale_count}}</span>
+        <div class="box_price">现价：{{pkgProduct.price}}元<span>原价：{{pkgProduct.oprice}}元</span></div>
       </div>
     </div>
     <div class="box_center">
       <div style="padding: 0 15px;">
-        <span>商品介绍</span>
-        <div>vue-router 默认 hash 模式 —— 使用 URL 的 hash 来模拟一个完整的 URL，于是当 URL 改变时，页面不会重新加载。
-
-如果不想要很丑的 hash，我们可以用路由的 history 模式，这种模式充分利用 history.pushState API 来完成 URL 跳转而无须重新加载页面。
-
-const router = new VueRouter({
-  mode: 'history',
-  routes: [...]
-})
-当你使用 history 模式时，URL 就像正常的 url，例如 http://yoursite.com/user/id，也好看！
-
-不过这种模式要玩好，还需要后台配置支持。因为我们的应用是个单页客户端应用，如果后台没有正确的配置，当用户在浏览器直接访问 http://oursite.com/user/id 就会返回 404，这就不好看了。
-
-所以呢，你要在服务端增加一个覆盖所有情况的候选资源：如果 URL 匹配不到任何静态资源，则应该返回同一个 index.html 页面，这个页面就是你 app 依赖的页面。
-
-后端配置例子</div>
+        <span>套餐介绍</span>
+        <div>{{pkgProduct.pkg_desc}}</div>
       </div>
     </div>
-    <div class="box_btn">
-      <span>888.00元</span>
-      <x-button class="btns" type="primary" @click.native="submit">立即支付</x-button>
-    </div>
     <divider style="margin-bottom:55px;">我是有底线的</divider>
+    <flexbox class="box_btn">
+      <flexbox-item><span>{{pkgProduct.price}}元</span></flexbox-item>
+      <flexbox-item  :span="4"><x-button class="btns" type="primary" @click.native="submit">立即支付</x-button></flexbox-item>
+    </flexbox>
   </div>
 </template>
 
 <script>
-import { XButton, Divider, XHeader } from 'vux'
+import wx from 'weixin-js-sdk'
+import { prepayInfo, updateInviter, queryPckDetail } from '../api.js'
+import { XButton, Divider, XHeader, Swiper, Flexbox, FlexboxItem } from 'vux'
 export default {
   components: {
     XButton,
     Divider,
-    XHeader
+    XHeader,
+    Swiper,
+    Flexbox,
+    FlexboxItem
   },
   data () {
     return {
-      imgUrl: 'http://fakeimg.pl/300x200/'
+      pkgProduct: [],
+      demo01_list: [{
+        url: 'javascript:',
+        img: 'https://static.vux.li/demo/1.jpg'
+      }, {
+        url: 'javascript:',
+        img: 'https://static.vux.li/demo/2.jpg'
+      }, {
+        url: 'javascript:',
+        img: 'https://static.vux.li/demo/3.jpg'
+      }]
     }
   },
+  created () {
+    this.queryDetail()
+  },
   methods: {
+    queryDetail () {
+      let para = {
+        pkg_id: sessionStorage.getItem('pkg_id')
+      }
+      queryPckDetail(para).then((res) => {
+        this.pkgProduct = res.data.pkgProduct
+      })
+    },
+    wxAddCard () {
+      let payData = JSON.parse(sessionStorage.getItem('payData'))
+      let para = {
+        mid: String(payData.mid),
+        invita_id: String(payData.invita_id)
+      }
+      updateInviter(para).then((res) => {
+        var cardExtdata = {
+          signature: res.signature,
+          nonce_str: res.nonce_str,
+          timestamp: res.timestamp,
+          outer_str: res.outer_str
+        }
+        wx.addCard({
+          cardList: [{
+            cardId: res.card_id,
+            cardExt: JSON.stringify(cardExtdata)
+          }], // 需要添加的卡券列表
+          success: function (res) {
+          }
+        })
+      })
+    },
     submit () {
-      this.$router.push({
-        path: '/payment'
+      let payData = JSON.parse(sessionStorage.getItem('payData'))
+      let para = {
+        amount: String('0.01'),
+        mid: String(payData.mid),
+        eid: String(payData.eId),
+        sid: String(payData.storeId),
+        oid: String(payData.payOpenId),
+        cardCode: '',
+        cardId: '',
+        cardOpenId: '',
+        pkg_id: String(sessionStorage.getItem('pkg_id')),
+        pkg_name: 'A套餐',
+        nick_name: '',
+        source: String(payData.source),
+        invita_id: String(payData.invita_id),
+        desc: '',
+        type: '1',
+        scene: 'W',
+        url: window.location.href.split('#')[0]
+      }
+      prepayInfo(para).then((res) => {
+        var _this = this
+        let { status, data } = res
+        if (status === 200) {
+          wx.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.appId, // 必填，公众号的唯一标识
+            timestamp: data.timestamp, // 必填，生成签名的时间戳
+            nonceStr: data.noncestr, // 必填，生成签名的随机串
+            signature: data.configSign, // 必填，签名，见附录1
+            jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          })
+          wx.ready(function () {
+            wx.chooseWXPay({
+              timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+              nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+              package: data.packages, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+              signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+              paySign: data.paySign, // 支付签名
+              success: function (res) {
+                // 支付成功后的回调函数
+                _this.wxAddCard()
+              },
+              fail: function (res) {
+                _this.$vux.toast.show({
+                  text: '支付失败',
+                  type: 'warn',
+                  time: 4000,
+                  isShowMask: true
+                })
+              },
+              cancel: function (res) {
+                _this.$vux.toast.show({
+                  text: '取消支付',
+                  type: 'warn',
+                  time: 4000,
+                  isShowMask: true
+                })
+              }
+            })
+          })
+        } else {
+          _this.$vux.toast.show({
+            text: '下单失败',
+            type: 'warn',
+            time: 4000,
+            isShowMask: true
+          })
+        }
       })
     }
+  },
+  mounted () {
+    console.log(this.$route.params)
   }
 }
 </script>
@@ -103,9 +208,7 @@ export default {
   border-top: 1px solid #999;
 }
 .btns{
-  width: 33%!important;
   height: 48px;
-  float: right;
   border-radius: 0!important;
   border: none
 }

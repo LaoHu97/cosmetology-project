@@ -1,32 +1,31 @@
 <template>
 <div class="index">
-  <div class="box" @click="buyClick">
+  <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id' v-bind:style="{ background: 'url('+item.pic_url+')' + ' 0% 0% / 100% 100% no-repeat' }">
     <div class="box_top">
-      <img class="box_logo" src="../assets/images/logo.jpg" alt="logo">
-      <span class="box_title">光电项目全年任性做</span>
-      <div class="box_top_r">
+      <!-- <img class="box_logo" src="../assets/images/logo.jpg" alt="logo"> -->
+      <span class="box_title">{{item.pkg_name}}</span>
+      <!-- <div class="box_top_r">
         <h1>VIP</h1><span>套餐</span>
-      </div>
+      </div> -->
     </div>
-    <div class="box_main">
+    <!-- <div class="box_main">
       <p><span>7</span>大科技美肤全年不限次数</p>
-    </div>
+    </div> -->
     <div class="box_bottom">
       <div class="box_text">
-        <p style="font-size:12px;color:#999;text-decoration:line-through;">原价：1213.00元</p>
-        <p style="font-weight:bold;color:#F7BA2A;">现价：1231.00元</p>
+        <p style="font-size:12px;color:#999;text-decoration:line-through;">原价：{{item.oprice}}元</p>
+        <p style="font-weight:bold;color:#F7BA2A;">现价：{{item.price}}元</p>
       </div>
-      <x-button mini type="primary" style="float: right;">购买</x-button>
+      <x-button mini type="primary" style="position:absolute;bottom:10px;right:10px;">购买</x-button>
     </div>
   </div>
-  <divider>我是有底线的</divider>
+  <divider style="margin-bottom:55px;">我是有底线的</divider>
 </div>
 </template>
 
 <script>
-// import { logo } from '../api.js'
-// import { querystring } from 'vux'
-import { Divider, XButton } from 'vux'
+import { initMemProduct } from '../api.js'
+import { querystring, Divider, XButton } from 'vux'
 export default {
   components: {
     Divider,
@@ -34,20 +33,36 @@ export default {
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      productList: []
     }
   },
+  created () {
+    this.Initialization()
+  },
   methods: {
-    buyClick () {
+    buyClick (data) {
+      sessionStorage.setItem('pkg_id', data)
       this.$router.push({
-        path: '/details'
+        name: 'Details'
+      })
+    },
+    Initialization () {
+      let para = querystring.parse()
+      let payOpenId = sessionStorage.getItem('payOpenId')
+      para.isInitCode = (!payOpenId || payOpenId === '') ? null : '1'
+      para.openCode = para.code
+      para.payOpenId = payOpenId
+      initMemProduct(para).then((res) => {
+        if (res.status === 200) {
+          this.productList = res.data.productList
+          sessionStorage.setItem('payData', JSON.stringify(res.data))
+          sessionStorage.setItem('payOpenId', res.data.payOpenId)
+        }
       })
     }
   },
   mounted () {
-    // logo().then((res) => {
-    //
-    // })
+
   }
 }
 </script>
@@ -77,18 +92,21 @@ a {
 }
 .box {
   width: 100%;
-  height: 165px;
+  min-height: 185px;
   border: 1px solid #999;
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 0 15px #999;
+  margin-top: 15px;
+  position: relative;
 }
 .box_top{
-  padding: 5px;
+  padding: 5px 0 5px 45px;
   line-height: 30px;
 }
 .box_title{
   padding-left: 5px;
+  background: none;
 }
 .box_logo{
   width: 30px;
@@ -135,10 +153,13 @@ a {
   vertical-align:top;
 }
 .box_bottom{
-    padding: 0 5px;
+  width: 100%;
 }
 .box_text{
   display: inline-block;
   vertical-align:top;
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
 }
 </style>

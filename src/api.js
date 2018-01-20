@@ -18,7 +18,9 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // 隐藏
-  Bus.$emit('loadingState', false)
+  setTimeout(function () {
+    Bus.$emit('loadingState', false)
+  }, 200)
   return response
 }, function (error) {
   // 对响应错误做点什么
@@ -28,6 +30,11 @@ axios.interceptors.response.use(function (response) {
 export default axios
 
 let base = process.env.API_ROOT
-console.log(base)
 
-export const logo = params => { return axios.post(`${base}/api/logo`, params).then(res => res.data) }
+export const initMemProduct = params => { return axios.post(`${base}/pay/activity/initMemProduct`, params).then(res => res.data) }
+
+export const prepayInfo = params => { return axios.post(`${base}/pay/activity/prepayInfo`, params).then(res => res.data) }
+
+export const updateInviter = params => { return axios.post(`${base}/pay/activity/updateInviter`, params).then(res => res.data) }
+
+export const queryPckDetail = params => { return axios.post(`${base}/pay/activity/queryPckDetail`, params).then(res => res.data) }
