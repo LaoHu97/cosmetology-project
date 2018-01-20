@@ -87,7 +87,7 @@ const webpackConfig = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin("styles.css"),
+    new ExtractTextPlugin("./static/css/styles.css"),
   ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
