@@ -1,6 +1,6 @@
 <template>
 <div class="index">
-  <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id' v-bind:style="{ background: 'url('+item.pic_url+')' + ' 0% 0% / 100% 100% no-repeat' }">
+  <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id' v-bind:style="{ background: 'url('+item.small_url+')' + ' 0% 0% / 100% 100% no-repeat' }">
     <div class="box_top">
       <!-- <img class="box_logo" src="../assets/images/logo.jpg" alt="logo"> -->
       <span class="box_title">{{item.pkg_name}}</span>

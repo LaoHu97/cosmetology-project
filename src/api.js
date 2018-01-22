@@ -38,3 +38,5 @@ export const prepayInfo = params => { return axios.post(`${base}/pay/activity/pr
 export const updateInviter = params => { return axios.post(`${base}/pay/activity/updateInviter`, params).then(res => res.data) }
 
 export const queryPckDetail = params => { return axios.post(`${base}/pay/activity/queryPckDetail`, params).then(res => res.data) }
+
+export const getMerIntroductionById = params => { return axios.post(`${base}/pay/weixin/activity/getMerIntroductionById`, params).then(res => res.data) }

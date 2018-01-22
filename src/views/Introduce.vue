@@ -4,7 +4,7 @@
       <x-header>商家介绍</x-header>
     </div>
     <div class="Introduce_top">
-      <swiper :list="demo01_list" dots-position="center" loop auto></swiper>
+      <swiper :list="img_list" dots-position="center" loop auto></swiper>
     </div>
     <div class="Introduce_main">
       <h4>商户介绍</h4>
@@ -13,8 +13,12 @@
         <flexbox-item><div class="flex-demo">理德雅芙</div></flexbox-item>
       </flexbox>
       <flexbox>
+        <flexbox-item :span="4"><div class="flex-demo" style="color:#999">商户介绍</div></flexbox-item>
+        <flexbox-item><div class="flex-demo">{{introduce.introduction}}</div></flexbox-item>
+      </flexbox>
+      <flexbox>
         <flexbox-item :span="4"><div class="flex-demo" style="color:#999">营业时间</div></flexbox-item>
-        <flexbox-item><div class="flex-demo">理德雅芙光电科技皮肤管理中心，是一家以现代高科技光电仪器为操作手段的美肤美体机构。中心有电光调Q，超声刀，水光仪，OPT，热力塑，RF射频，slimming纤体等十余台国际一线品牌美肤仪器。</div></flexbox-item>
+        <flexbox-item><div class="flex-demo">牌美肤仪器。</div></flexbox-item>
       </flexbox>
       <flexbox>
         <flexbox-item :span="4"><div class="flex-demo" style="color:#999">联系电话</div></flexbox-item>
@@ -34,6 +38,7 @@
 </template>
 
 <script>
+import { getMerIntroductionById } from '../api.js'
 import { XHeader, Swiper, Flexbox, FlexboxItem, Divider } from 'vux'
 export default {
   components: {
@@ -45,16 +50,22 @@ export default {
   },
   data () {
     return {
-      demo01_list: [{
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/1.jpg'
-      }, {
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/2.jpg'
-      }, {
-        url: 'javascript:',
-        img: 'https://static.vux.li/demo/3.jpg'
-      }]
+      img_list: [],
+      introduce:null
+    }
+  },
+  created () {
+    this.getMerIntroduction()
+  },
+  methods: {
+    getMerIntroduction(){
+      let para = {
+        id:'66'
+      }
+      getMerIntroductionById(para).then((res)=>{
+        this.introduce=res.data
+        this.img_list=res
+      })
     }
   }
 }
