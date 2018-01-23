@@ -45,3 +45,5 @@ export const updateInviter = params => { return axios.post(`${base}/pay/activity
 export const queryPckDetail = params => { return axios.post(`${base}/pay/activity/queryPckDetail`, params).then(res => res.data) }
 
 export const getMerIntroductionById = params => { return axios.post(`${base}/pay/weixin/activity/getMerIntroductionById`, params).then(res => res.data) }
+
+export const receiveCardAfter = params => { return axios.post(`${base}/pay/activity/receiveCardAfter`, params).then(res => res.data) }

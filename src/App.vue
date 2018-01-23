@@ -18,7 +18,7 @@
   </tabbar>
   <div v-transfer-dom>
     <loading :show="loadingShow" text="请稍后"></loading>
-    <alert v-model="alertShow" title="提示" @on-hide="onHide">网络繁忙，请稍候再试</alert>
+    <alert v-model="alertShow" title="提示" @on-hide="onHide">错误，请稍候再试</alert>
   </div>
 </div>
 </template>

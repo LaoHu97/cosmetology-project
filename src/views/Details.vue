@@ -26,7 +26,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
-import { prepayInfo, updateInviter, queryPckDetail } from '../api.js'
+import { prepayInfo, updateInviter, queryPckDetail, receiveCardAfter } from '../api.js'
 import { XButton, Divider, XHeader, Swiper, Flexbox, FlexboxItem } from 'vux'
 export default {
   components: {
@@ -56,25 +56,41 @@ export default {
         this.img_list = res.data.picUrlList
       })
     },
-    wxAddCard () {
+    wxAddCard (cb) {
       let payData = JSON.parse(sessionStorage.getItem('payData'))
       let para = {
         mid: String(payData.mid),
-        invita_id: String(payData.invita_id)
+        purchaseId: String(cb),
+        ive: String(payData.ive),
+        ivr: String(payData.ivr),
+        sc: String(payData.source)
       }
       updateInviter(para).then((res) => {
         var cardExtdata = {
-          signature: res.signature,
-          nonce_str: res.nonce_str,
-          timestamp: res.timestamp,
-          outer_str: res.outer_str
+          signature: res.data.signature,
+          nonce_str: res.data.nonce_str,
+          timestamp: res.data.timestamp,
+          outer_str: res.data.outer_str
         }
+        let purchaseId = res.data.purchaseId
         wx.addCard({
           cardList: [{
-            cardId: res.card_id,
+            cardId: res.data.card_id,
             cardExt: JSON.stringify(cardExtdata)
           }], // 需要添加的卡券列表
           success: function (res) {
+            let payData = JSON.parse(sessionStorage.getItem('payData'))
+            let para = {
+              mid: String(payData.mid),
+              ive: String(payData.ive),
+              purchaseId: purchaseId,
+              cardCode: res.cardList[0].code,
+              cardid: res.cardList[0].cardId,
+              isSuccess: res.cardList[0].isSuccess
+            }
+            receiveCardAfter(para).then((res) => {
+              alert('123')
+            })
           }
         })
       })
@@ -98,6 +114,8 @@ export default {
         desc: '',
         type: '1',
         scene: 'W',
+        ivr: String(payData.ivr),
+        ive: String(payData.ive),
         url: window.location.href.split('#')[0]
       }
       prepayInfo(para).then((res) => {
@@ -121,7 +139,7 @@ export default {
               paySign: data.paySign, // 支付签名
               success: function (res) {
                 // 支付成功后的回调函数
-                _this.wxAddCard()
+                _this.wxAddCard(data.purchaseId)
               },
               fail: function (res) {
                 _this.$vux.toast.show({
