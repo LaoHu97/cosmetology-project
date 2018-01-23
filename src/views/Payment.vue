@@ -1,8 +1,5 @@
 <template lang="html">
   <div class="">
-    <div class="hacker-header">
-      <x-header>支付完成</x-header>
-    </div>
     <div class="box_view">
       <icon type="success" is-msg></icon>
       <h4>支付成功</h4>

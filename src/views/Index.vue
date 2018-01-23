@@ -43,7 +43,7 @@ export default {
     buyClick (data) {
       sessionStorage.setItem('pkg_id', data)
       this.$router.push({
-        name: 'Details'
+        path: '/details'
       })
     },
     Initialization () {

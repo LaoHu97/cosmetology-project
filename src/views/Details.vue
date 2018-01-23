@@ -1,10 +1,7 @@
 <template lang="html">
   <div>
-    <div class="hacker-header">
-      <x-header>套餐详情</x-header>
-    </div>
     <div class="top_img">
-      <swiper :list="demo01_list" dots-position="center" loop auto :show-desc-mask="false"></swiper>
+      <swiper :list="img_list" dots-position="center" loop auto :show-desc-mask="false"></swiper>
     </div>
     <div class="box_title">
       <div style="padding: 0 15px;">
@@ -43,7 +40,7 @@ export default {
   data () {
     return {
       pkgProduct: [],
-      demo01_list: []
+      img_list: []
     }
   },
   created () {
@@ -56,8 +53,7 @@ export default {
       }
       queryPckDetail(para).then((res) => {
         this.pkgProduct = res.data.pkgProduct
-        this.demo01_list = res.data.picUrlList
-        console.log(this.demo01_list)
+        this.img_list = res.data.picUrlList
       })
     },
     wxAddCard () {
@@ -157,7 +153,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params)
   }
 }
 </script>

@@ -12,33 +12,33 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
+      name: '套餐首页',
       component: Index,
-      meta: { navShow: true, cname: '首页' }
+      meta: { navShow: true, headerShow: false }
     },
     {
       path: '/details',
-      name: 'Details',
+      name: '套餐详情',
       component: Details,
-      meta: { navShow: false, cname: '详情页' }
+      meta: { navShow: false, headerShow: true }
     },
     {
       path: '/payment',
-      name: 'Payment',
+      name: '支付',
       component: Payment,
-      meta: { navShow: false, cname: '支付页' }
+      meta: { navShow: false, headerShow: true }
     },
     {
       path: '/order',
-      name: 'Order',
+      name: '订单',
       component: Order,
-      meta: { navShow: true, cname: '订单' }
+      meta: { navShow: true, headerShow: true }
     },
     {
       path: '/introduce',
-      name: 'Introduce',
+      name: '商户介绍',
       component: Introduce,
-      meta: { navShow: true, cname: '介绍' }
+      meta: { navShow: true, headerShow: true }
     }
   ]
 })

@@ -1,5 +1,8 @@
 <template>
 <div id="app">
+  <div class="header" v-show="$route.meta.headerShow">
+    <x-header>{{$route.name}}</x-header>
+  </div>
   <transition name="slide-fade">
     <router-view/>
   </transition>
@@ -14,14 +17,15 @@
     </tabbar-item>
   </tabbar>
   <div v-transfer-dom>
-    <loading :show="show" text="请稍后"></loading>
+    <loading :show="loadingShow" text="请稍后"></loading>
+    <alert v-model="alertShow" title="提示" @on-hide="onHide">网络繁忙，请稍候再试</alert>
   </div>
 </div>
 </template>
 
 <script>
 import Bus from './bus.js'
-import { Tabbar, TabbarItem, Loading, TransferDomDirective as TransferDom } from 'vux'
+import { Tabbar, TabbarItem, Loading, XHeader, Alert, TransferDomDirective as TransferDom } from 'vux'
 export default {
   name: 'App',
   directives: {
@@ -30,17 +34,28 @@ export default {
   components: {
     Tabbar,
     TabbarItem,
-    Loading
+    Loading,
+    XHeader,
+    Alert
   },
   data () {
     return {
-      show: false
+      loadingShow: false,
+      alertShow: false
     }
   },
   created () {
     Bus.$on('loadingState', boolean => {
-      this.show = boolean
+      this.loadingShow = boolean
     })
+    Bus.$on('alertState', boolean => {
+      this.alertShow = boolean
+    })
+  },
+  methods: {
+    onHide () {
+
+    }
   }
 }
 </script>

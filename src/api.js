@@ -21,9 +21,14 @@ axios.interceptors.response.use(function (response) {
   setTimeout(function () {
     Bus.$emit('loadingState', false)
   }, 200)
+  if (response.data.status !== 200) {
+    Bus.$emit('alertState', true)
+  }
   return response
 }, function (error) {
   // 对响应错误做点什么
+  Bus.$emit('loadingState', false)
+  Bus.$emit('alertState', true)
   return Promise.reject(error)
 })
 
