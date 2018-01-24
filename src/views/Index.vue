@@ -1,22 +1,31 @@
 <template>
 <div class="index">
-  <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id' v-bind:style="{ background: 'url('+item.small_url+')' + ' 0% 0% / 100% 100% no-repeat' }">
-    <div class="box_top">
-      <!-- <img class="box_logo" src="../assets/images/logo.jpg" alt="logo"> -->
+  <!-- <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id' v-bind:style="{ background: 'url('+item.small_url+')' + ' 0% 0% / 100% 100% no-repeat' }"> -->
+  <div class="box" @click="buyClick(item.id)" v-for="item in productList" :key='item.id'>
+    <img :src="item.small_url" alt="套餐图" width="100%">
+    <!-- <div class="box_top">
+      <img class="box_logo" src="../assets/images/logo.jpg" alt="logo">
       <span class="box_title">{{item.pkg_name}}</span>
-      <!-- <div class="box_top_r">
+      <div class="box_top_r">
         <h1>VIP</h1><span>套餐</span>
-      </div> -->
+      </div>
     </div>
-    <!-- <div class="box_main">
+    <div class="box_main">
       <p><span>7</span>大科技美肤全年不限次数</p>
-    </div> -->
+    </div>
     <div class="box_bottom">
       <div class="box_text">
         <p style="font-size:12px;color:#999;text-decoration:line-through;">原价：{{item.oprice}}元</p>
         <p style="font-weight:bold;color:#F7BA2A;">现价：{{item.price}}元</p>
       </div>
-      <x-button mini type="primary" style="position:absolute;bottom:10px;right:10px;">购买</x-button>
+      <x-button mini type="primary" style="position:absolute;bottom:38px;left:48px;">购买</x-button>
+    </div> -->
+    <div class="box_bottom">
+      <div class="box_text">
+        <p style="font-size:12px;color:#999;text-decoration:line-through;">原价：{{item.oprice}}元</p>
+        <p style="font-weight:bold;color:#531C79;">现价：{{item.price}}元</p>
+      </div>
+      <x-button mini type="primary" style="float:right;margin-top:8px;">购买</x-button>
     </div>
   </div>
   <divider style="margin-bottom:55px;">我是有底线的</divider>
@@ -92,13 +101,11 @@ a {
 }
 .box {
   width: 100%;
-  min-height: 185px;
-  border: 1px solid #999;
+  height: 100%;
+  margin-bottom: 30px;
+}
+.box img{
   border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0 0 15px #999;
-  margin-top: 15px;
-  position: relative;
 }
 .box_top{
   padding: 5px 0 5px 45px;
@@ -158,8 +165,5 @@ a {
 .box_text{
   display: inline-block;
   vertical-align:top;
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
 }
 </style>

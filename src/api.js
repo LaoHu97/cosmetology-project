@@ -18,17 +18,25 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // 隐藏
+  let alertStateMap = {
+    boolean: true,
+    message: response.data.message
+  }
   setTimeout(function () {
     Bus.$emit('loadingState', false)
   }, 200)
   if (response.data.status !== 200) {
-    Bus.$emit('alertState', true)
+    Bus.$emit('alertState', alertStateMap)
   }
   return response
 }, function (error) {
   // 对响应错误做点什么
+  let alertStateMap = {
+    boolean: true,
+    message: '网络错误，请稍后再试'
+  }
   Bus.$emit('loadingState', false)
-  Bus.$emit('alertState', true)
+  Bus.$emit('alertState', alertStateMap)
   return Promise.reject(error)
 })
 

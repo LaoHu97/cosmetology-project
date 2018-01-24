@@ -11,9 +11,13 @@
       </div>
     </div>
     <div class="box_center">
-      <div style="padding: 0 15px;">
-        <span>套餐介绍</span>
-        <div>{{pkgProduct.pkg_desc}}</div>
+      <div>
+        <div v-for="src in list" :key='src' style="background-color: #eee;text-align:center; position: relative;">
+          <div class="box_load_more">
+            <load-more :show-loading="true" tip="正在加载" background-color="#fbf9fe"></load-more>
+          </div>
+          <x-img :src="src" @on-error="imgError" @on-success="imgSuccess" class="box_center_img" error-class="ximg-error" :offset="-100"></x-img>
+        </div>
       </div>
     </div>
     <divider style="margin-bottom:55px;">我是有底线的</divider>
@@ -27,7 +31,7 @@
 <script>
 import wx from 'weixin-js-sdk'
 import { prepayInfo, updateInviter, queryPckDetail, receiveCardAfter } from '../api.js'
-import { XButton, Divider, XHeader, Swiper, Flexbox, FlexboxItem } from 'vux'
+import { XButton, Divider, XHeader, Swiper, Flexbox, FlexboxItem, XImg, LoadMore } from 'vux'
 export default {
   components: {
     XButton,
@@ -35,18 +39,43 @@ export default {
     XHeader,
     Swiper,
     Flexbox,
-    FlexboxItem
+    FlexboxItem,
+    XImg,
+    LoadMore
   },
   data () {
     return {
       pkgProduct: [],
-      img_list: []
+      img_list: [],
+      list: [
+        'https://o5omsejde.qnssl.com/demo/test1.jpg',
+        'https://o5omsejde.qnssl.com/demo/test2.jpg',
+        'https://o5omsejde.qnssl.com/demo/test0.jpg',
+        'https://o5omsejde.qnssl.com/demo/test4.jpg',
+        'https://o5omsejde.qnssl.com/demo/test5.jpg',
+        'https://o5omsejde.qnssl.com/demo/test6.jpg',
+        'https://o5omsejde.qnssl.com/demo/test7.jpg',
+        'https://o5omsejde.qnssl.com/demo/test8.jpg'
+      ]
     }
   },
   created () {
     this.queryDetail()
   },
   methods: {
+    imgSuccess (src, ele) {
+      const div = ele.parentNode.querySelector('div')
+      ele.parentNode.removeChild(div)
+    },
+    imgError (src, ele) {
+      console.log('图片加载失败', src)
+      const span = ele.parentNode.querySelector('div span')
+      span.innerText = '图片加载失败'
+      const i = ele.parentNode.querySelector('div i')
+      const romve = ele.parentNode.querySelector('div .vux-loadmore')
+      romve.removeChild(i)
+      romve.className = 'vux-loadmore weui-loadmore weui-loadmore_line'
+    },
     queryDetail () {
       let para = {
         pkg_id: sessionStorage.getItem('pkg_id')
@@ -107,10 +136,9 @@ export default {
         cardId: '',
         cardOpenId: '',
         pkg_id: String(sessionStorage.getItem('pkg_id')),
-        pkg_name: 'A套餐',
+        pkg_name: this.pkgProduct.pkg_name,
         nick_name: '',
         source: String(payData.source),
-        invita_id: String(payData.invita_id),
         desc: '',
         type: '1',
         scene: 'W',
@@ -176,6 +204,22 @@ export default {
 </script>
 
 <style lang="css">
+.box_center_img {
+  width: 100%;
+  height: auto;
+}
+.ximg-error {
+  background-color: yellow;
+  background-color: transparent;
+}
+.ximg-error:after {
+  content: '加载失败';
+  color: red;
+}
+.box_load_more{
+  width: 100%;
+  position: absolute;
+}
 .top_img{
   width: 100%;
   display: inline-block;

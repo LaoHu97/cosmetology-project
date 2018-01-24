@@ -3,22 +3,22 @@
   <div class="header" v-show="$route.meta.headerShow">
     <x-header>{{$route.name}}</x-header>
   </div>
-  <transition name="slide-fade">
+  <!-- <transition name="slide-fade"> -->
     <router-view/>
-  </transition>
+  <!-- </transition> -->
   <tabbar style="position:fixed" v-show="$route.meta.navShow">
     <tabbar-item link="/" :selected="$route.path == '/'">
-      <i slot="icon" class="iconfont">&#xe702;</i>
+      <i slot="icon" class="iconfont">&#xe622;</i>
       <span slot="label">套餐</span>
     </tabbar-item>
     <tabbar-item link="/introduce" :selected="$route.path == '/introduce'">
-      <i slot="icon" class="iconfont">&#xe6e7;</i>
+      <i slot="icon" class="iconfont">&#xe6de;</i>
       <span slot="label">介绍</span>
     </tabbar-item>
   </tabbar>
   <div v-transfer-dom>
     <loading :show="loadingShow" text="请稍后"></loading>
-    <alert v-model="alertShow" title="提示" @on-hide="onHide">错误，请稍候再试</alert>
+    <alert v-model="alertShow" title="提示" @on-hide="onHide">{{alertText}}</alert>
   </div>
 </div>
 </template>
@@ -41,15 +41,18 @@ export default {
   data () {
     return {
       loadingShow: false,
-      alertShow: false
+      alertShow: false,
+      alertText: ''
     }
   },
   created () {
     Bus.$on('loadingState', boolean => {
       this.loadingShow = boolean
     })
-    Bus.$on('alertState', boolean => {
-      this.alertShow = boolean
+    Bus.$on('alertState', alertStateMap => {
+      console.log(alertStateMap)
+      this.alertShow = alertStateMap.boolean
+      this.alertText = alertStateMap.message
     })
   },
   methods: {
@@ -66,12 +69,12 @@ export default {
   height: 100%;
 }
 @font-face {
-  font-family: 'iconfont';  /* project id 437726 */
-  src: url('//at.alicdn.com/t/font_437726_zekhvji7i1d4e7b9.eot');
-  src: url('//at.alicdn.com/t/font_437726_zekhvji7i1d4e7b9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_437726_zekhvji7i1d4e7b9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_437726_zekhvji7i1d4e7b9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_437726_zekhvji7i1d4e7b9.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* project id 302321 */
+  src: url('//at.alicdn.com/t/font_302321_r8td9l7twwvr6bt9.eot');
+  src: url('//at.alicdn.com/t/font_302321_r8td9l7twwvr6bt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_302321_r8td9l7twwvr6bt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_302321_r8td9l7twwvr6bt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_302321_r8td9l7twwvr6bt9.svg#iconfont') format('svg');
 }
 .iconfont{
     font-family:"iconfont" !important;
@@ -82,6 +85,9 @@ export default {
 }
 p{
   margin: 0;
+}
+img{
+  display: block;
 }
 a{
   text-decoration: none;
