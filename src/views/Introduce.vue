@@ -21,14 +21,14 @@
         <flexbox-item :span="4"><div class="flex-demo" style="color:#999">联系电话</div></flexbox-item>
         <flexbox-item><div class="flex-demo">{{introduce.phone}}</div></flexbox-item>
       </flexbox>
-      <flexbox>
+      <!-- <flexbox>
         <flexbox-item :span="4"><div class="flex-demo" style="color:#999">门店列表</div></flexbox-item>
         <flexbox-item>
           <div class="flex-demo">XX店（XX市XX街道）</div>
           <div class="flex-demo">XX店（XX市XX街道）</div>
           <div class="flex-demo">XX店（XX市XX街道）</div>
         </flexbox-item>
-      </flexbox>
+      </flexbox> -->
     </div>
     <divider style="margin-bottom:55px;">我是有底线的</divider>
   </div>

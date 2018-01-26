@@ -12,11 +12,11 @@
     </div>
     <div class="box_center">
       <div>
-        <div v-for="src in list" :key='src' style="background-color: #eee;text-align:center; position: relative;">
+        <div v-for="src in list" :key='src.img' style="background-color: #eee;text-align:center; position: relative;">
           <div class="box_load_more">
             <load-more :show-loading="true" tip="正在加载" background-color="#fbf9fe"></load-more>
           </div>
-          <x-img :src="src" @on-error="imgError" @on-success="imgSuccess" class="box_center_img" error-class="ximg-error" :offset="-100"></x-img>
+          <x-img :src="src.img" @on-error="imgError" @on-success="imgSuccess" class="box_center_img" error-class="ximg-error" :offset="-100"></x-img>
         </div>
       </div>
     </div>
@@ -47,16 +47,7 @@ export default {
     return {
       pkgProduct: [],
       img_list: [],
-      list: [
-        'https://o5omsejde.qnssl.com/demo/test1.jpg',
-        'https://o5omsejde.qnssl.com/demo/test2.jpg',
-        'https://o5omsejde.qnssl.com/demo/test0.jpg',
-        'https://o5omsejde.qnssl.com/demo/test4.jpg',
-        'https://o5omsejde.qnssl.com/demo/test5.jpg',
-        'https://o5omsejde.qnssl.com/demo/test6.jpg',
-        'https://o5omsejde.qnssl.com/demo/test7.jpg',
-        'https://o5omsejde.qnssl.com/demo/test8.jpg'
-      ]
+      list: []
     }
   },
   created () {
@@ -83,6 +74,7 @@ export default {
       queryPckDetail(para).then((res) => {
         this.pkgProduct = res.data.pkgProduct
         this.img_list = res.data.picUrlList
+        this.list = JSON.parse(res.data.pkgProduct.image_url)
       })
     },
     wxAddCard (cb) {

@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/views/Index'
-import Details from '@/views/Details'
-import Payment from '@/views/Payment'
-import Order from '@/views/Order'
-import Introduce from '@/views/Introduce'
+// import Index from '@/views/Index'
+// import Details from '@/views/Details'
+// import Payment from '@/views/Payment'
+// import Order from '@/views/Order'
+// import Introduce from '@/views/Introduce'
+
+const Index = () => import('@/views/Index')
+const Details = () => import('@/views/Details')
+const Payment = () => import('@/views/Payment')
+const Order = () => import('@/views/Order')
+const Introduce = () => import('@/views/Introduce')
 
 Vue.use(Router)
 
