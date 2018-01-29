@@ -74,7 +74,7 @@ export default {
       queryPckDetail(para).then((res) => {
         this.pkgProduct = res.data.pkgProduct
         this.img_list = res.data.picUrlList
-        this.list = JSON.parse(res.data.pkgProduct.image_url)
+        this.list = res.data.imgDetailList
       })
     },
     wxAddCard (cb) {
@@ -82,10 +82,12 @@ export default {
       let para = {
         mid: String(payData.mid),
         purchaseId: String(cb),
-        ive: String(payData.ive),
-        ivr: String(payData.ivr),
+        ive: payData.ive,
+        ivr: payData.ivr,
         sc: String(payData.source)
       }
+      para.ivr = para.ivr == null ? para.ivr : String(para.ivr)
+      para.ive = para.ive == null ? para.ive : String(para.ive)
       updateInviter(para).then((res) => {
         var cardExtdata = {
           signature: res.data.signature,
@@ -126,7 +128,7 @@ export default {
         oid: String(payData.payOpenId),
         cardCode: '',
         cardId: '',
-        cardOpenId: '',
+        cardOpenId: String(payData.cardOpenId),
         pkg_id: String(sessionStorage.getItem('pkg_id')),
         pkg_name: this.pkgProduct.pkg_name,
         nick_name: '',
@@ -134,10 +136,12 @@ export default {
         desc: '',
         type: '1',
         scene: 'W',
-        ivr: String(payData.ivr),
-        ive: String(payData.ive),
+        ivr: payData.ivr,
+        ive: payData.ive,
         url: window.location.href.split('#')[0]
       }
+      para.ivr = para.ivr == null ? para.ivr : String(para.ivr)
+      para.ive = para.ive == null ? para.ive : String(para.ive)
       prepayInfo(para).then((res) => {
         var _this = this
         let { status, data } = res
