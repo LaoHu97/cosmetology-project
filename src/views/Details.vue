@@ -6,7 +6,7 @@
     <div class="box_title">
       <div style="padding: 0 15px;">
         <span>{{pkgProduct.pkg_name}}</span>
-        <span style="float:right">销量：{{pkgProduct.sale_count}}</span>
+        <!-- <span style="float:right">销量：{{pkgProduct.sale_count}}</span> -->
         <div class="box_price">现价：{{pkgProduct.price}}元<span>原价：{{pkgProduct.oprice}}元</span></div>
       </div>
     </div>
@@ -30,7 +30,7 @@
 
 <script>
 import wx from 'weixin-js-sdk'
-import { prepayInfo, updateInviter, queryPckDetail, receiveCardAfter } from '../api.js'
+import { prepayInfo, updateInviter, queryPckDetail, receiveCardAfter, addCardConfig } from '../api.js'
 import { XButton, Divider, XHeader, Swiper, Flexbox, FlexboxItem, XImg, LoadMore } from 'vux'
 export default {
   components: {
@@ -52,6 +52,7 @@ export default {
   },
   created () {
     this.queryDetail()
+    this.wxConfig()
   },
   methods: {
     imgSuccess (src, ele) {
@@ -77,6 +78,29 @@ export default {
         this.list = res.data.imgDetailList
       })
     },
+    wxConfig () {
+      let payData = JSON.parse(sessionStorage.getItem('payData'))
+      let para = {
+        mid: String(payData.mid),
+        url: window.location.href.split('#')[0]
+      }
+      addCardConfig(para).then((res) => {
+        wx.config({
+          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: res.data.configinfo.appId, // 必填，公众号的唯一标识
+          timestamp: res.data.configinfo.timestamp, // 必填，生成签名的时间戳
+          nonceStr: res.data.configinfo.noncestr, // 必填，生成签名的随机串
+          signature: res.data.configinfo.configSign, // 必填，签名，见附录1
+          jsApiList: ['addCard'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        })
+        wx.ready(function () {
+          // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+        })
+        wx.error(function (res) {
+          // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+        })
+      })
+    },
     wxAddCard (cb) {
       let payData = JSON.parse(sessionStorage.getItem('payData'))
       let para = {
@@ -89,7 +113,7 @@ export default {
       para.ivr = para.ivr == null ? para.ivr : String(para.ivr)
       para.ive = para.ive == null ? para.ive : String(para.ive)
       updateInviter(para).then((res) => {
-        var cardExtdata = {
+        let cardExtdata = {
           signature: res.data.signature,
           nonce_str: res.data.nonce_str,
           timestamp: res.data.timestamp,
@@ -109,10 +133,11 @@ export default {
               purchaseId: purchaseId,
               cardCode: res.cardList[0].code,
               cardid: res.cardList[0].cardId,
-              isSuccess: res.cardList[0].isSuccess
+              isSuccess: res.cardList[0].isSuccess,
+              res: res
             }
             receiveCardAfter(para).then((res) => {
-              alert('123')
+              alert('通知领卡成功')
             })
           }
         })
@@ -146,42 +171,18 @@ export default {
         var _this = this
         let { status, data } = res
         if (status === 200) {
-          wx.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: data.appId, // 必填，公众号的唯一标识
-            timestamp: data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: data.noncestr, // 必填，生成签名的随机串
-            signature: data.configSign, // 必填，签名，见附录1
-            jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          })
-          wx.ready(function () {
-            wx.chooseWXPay({
-              timestamp: data.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-              nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-              package: data.packages, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-              signType: data.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-              paySign: data.paySign, // 支付签名
-              success: function (res) {
-                // 支付成功后的回调函数
-                _this.wxAddCard(data.purchaseId)
-              },
-              fail: function (res) {
-                _this.$vux.toast.show({
-                  text: '支付失败',
-                  type: 'warn',
-                  time: 4000,
-                  isShowMask: true
-                })
-              },
-              cancel: function (res) {
-                _this.$vux.toast.show({
-                  text: '取消支付',
-                  type: 'warn',
-                  time: 4000,
-                  isShowMask: true
-                })
-              }
-            })
+          /* eslint-disable */
+          WeixinJSBridge.invoke('getBrandWCPayRequest', {
+            "appId": data.appId,//公众号名称，由商户传入
+            "timeStamp": data.timeStamp,//时间戳，自1970年以来的秒数
+            "nonceStr": data.nonceStr,//随机串
+            "package": data.packages,
+            "signType": data.signType,//微信签名方式：
+            "paySign": data.paySign//微信签名
+          },function(res){
+            if(res.err_msg == "get_brand_wcpay_request:ok" ){
+              _this.wxAddCard(data.purchaseId)
+            }
           })
         } else {
           _this.$vux.toast.show({

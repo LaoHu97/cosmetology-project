@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getMerIntroductionById } from '../api.js'
+import { getMerIntroductionByMId } from '../api.js'
 import { Swiper, Flexbox, FlexboxItem, Divider } from 'vux'
 export default {
   components: {
@@ -57,9 +57,9 @@ export default {
     getMerIntroduction () {
       let payData = JSON.parse(sessionStorage.getItem('payData'))
       let para = {
-        id: String(payData.mid)
+        mid: String(payData.mid)
       }
-      getMerIntroductionById(para).then((res) => {
+      getMerIntroductionByMId(para).then((res) => {
         this.introduce = res.data
         this.img_list = res.data.urlList
       })
