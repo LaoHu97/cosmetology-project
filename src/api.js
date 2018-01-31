@@ -2,7 +2,7 @@ import axios from 'axios'
 import Bus from './bus.js'
 
 // 超时时间
-axios.defaults.timeout = 5000
+// axios.defaults.timeout = 5000
 // http请求拦截器
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

@@ -11,6 +11,7 @@ const Details = () => import('@/views/Details')
 const Payment = () => import('@/views/Payment')
 const Order = () => import('@/views/Order')
 const Introduce = () => import('@/views/Introduce')
+const Complete = () => import('@/views/Complete')
 
 Vue.use(Router)
 
@@ -29,7 +30,7 @@ export default new Router({
       meta: { navShow: false, headerShow: true }
     },
     {
-      path: '/payment',
+      path: '/payment/:amount/:pkg_name',
       name: '支付',
       component: Payment,
       meta: { navShow: false, headerShow: true }
@@ -45,6 +46,12 @@ export default new Router({
       name: '商户介绍',
       component: Introduce,
       meta: { navShow: true, headerShow: true }
+    },
+    {
+      path: '/complete',
+      name: '完成',
+      component: Complete,
+      meta: { navShow: false, headerShow: false }
     }
   ]
 })

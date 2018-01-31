@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="Introduce">
     <div class="Introduce_top">
-      <swiper :list="img_list" dots-position="center" loop auto :show-desc-mask="false"></swiper>
+      <swiper :list="img_list" :aspect-ratio="650/1000" dots-position="center" loop auto :show-desc-mask="false"></swiper>
     </div>
     <div class="Introduce_main">
       <h4>商户介绍</h4>

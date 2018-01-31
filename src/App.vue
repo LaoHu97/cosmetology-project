@@ -50,7 +50,6 @@ export default {
       this.loadingShow = boolean
     })
     Bus.$on('alertState', alertStateMap => {
-      console.log(alertStateMap)
       this.alertShow = alertStateMap.boolean
       this.alertText = alertStateMap.message
     })
