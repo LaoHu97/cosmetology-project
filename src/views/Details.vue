@@ -23,7 +23,7 @@
     <divider style="margin-bottom:55px;">我是有底线的</divider>
     <flexbox class="box_btn">
       <flexbox-item><span>{{pkgProduct.price}}元</span></flexbox-item>
-      <flexbox-item  :span="4"><x-button class="btns" type="primary" @click.native="submit">立即支付</x-button></flexbox-item>
+      <flexbox-item  :span="4"><x-button class="btns" type="primary" @click.native="submit">立即购买</x-button></flexbox-item>
     </flexbox>
   </div>
 </template>
