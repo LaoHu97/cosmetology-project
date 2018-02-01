@@ -11,11 +11,14 @@
 
 <script>
 import wx from 'weixin-js-sdk'
+import { addCardConfig } from '../api.js'
 import { XButton, Icon } from 'vux'
 export default {
   components: {
     XButton,
     Icon
+  },
+  created () {
   },
   methods: {
     submit () {
