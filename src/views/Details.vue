@@ -1,15 +1,15 @@
 <template lang="html">
   <div>
-    <div class="top_img">
+    <!-- <div class="top_img">
       <swiper :list="img_list" :aspect-ratio="650/1000" dots-position="center" loop auto :show-desc-mask="false"></swiper>
     </div>
     <div class="box_title">
       <div style="padding: 0 15px;">
         <span>{{pkgProduct.pkg_name}}</span>
-        <!-- <span style="float:right">销量：{{pkgProduct.sale_count}}</span> -->
+        <span style="float:right">销量：{{pkgProduct.sale_count}}</span>
         <div class="box_price">现价：{{pkgProduct.price}}元<span>原价：{{pkgProduct.oprice}}元</span></div>
       </div>
-    </div>
+    </div> -->
     <div class="box_center">
       <div>
         <div v-for="src in list" :key='src.img' style="background-color: #eee;text-align:center; position: relative;">
@@ -134,7 +134,6 @@ export default {
 .box_center{
   width: 100%;
   background-color: #fff;
-  margin-top: 10px;
   line-height: 25px;
 }
 .box_btn{
