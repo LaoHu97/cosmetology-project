@@ -18,7 +18,8 @@
     "vue-infinite-loading": "^2.2.3",
     "vue-router": "^3.0.1",
     "vux": "^2.7.7",
-    "vux-loader": "^1.1.31"
+    "vux-loader": "^1.1.31",
+    "weixin-js-sdk": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
