@@ -4,7 +4,7 @@
       <radio :options="radioOptions" value="微信支付" disabled></radio>
     </group>
     <group title="非必填项">
-      <x-input title="邀请码" v-model="invitationCode" placeholder="请输入邀请码" novalidate :show-clear="false" placeholder-align="right" text-align="center"></x-input>
+      <x-input title="邀请码" v-model="invitationCode" placeholder="请输入邀请码" :disabled="codeDisabled" novalidate :show-clear="false" placeholder-align="right" text-align="center"></x-input>
     </group>
     <box gap="35px 10px">
       <x-button type="primary" @click.native="submit">确认支付</x-button>
@@ -29,12 +29,11 @@ export default {
   data () {
     return {
       radioOptions: [ '微信支付' ],
-      invitationCode: ''
+      invitationCode: '',
+      codeDisabled: false
     }
   },
   created () {
-    console.log(this.$route.params.amount)
-    console.log(this.$route.params.pkg_name)
     // this.wxConfig()
   },
   methods: {
@@ -139,6 +138,9 @@ export default {
   },
   mounted () {
     let payData = JSON.parse(sessionStorage.getItem('payData'))
+    if (payData.inviterCode) {
+      this.codeDisabled=true
+    }
     this.invitationCode = payData.inviterCode
   }
 }
