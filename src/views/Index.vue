@@ -28,7 +28,7 @@
       <x-button mini type="primary" style="float:right;margin-top:8px;">购买</x-button>
     </div>
   </div>
-  <divider style="margin-bottom:55px;">我是有底线的</divider>
+  <divider style="margin-bottom:55px;">万鼎科技 技术支持</divider>
 </div>
 </template>
 

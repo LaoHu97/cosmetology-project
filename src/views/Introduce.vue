@@ -30,7 +30,7 @@
         </flexbox-item>
       </flexbox> -->
     </div>
-    <divider style="margin-bottom:55px;">我是有底线的</divider>
+    <divider style="margin-bottom:55px;">万鼎科技 技术支持</divider>
   </div>
 </template>
 
