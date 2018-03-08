@@ -60,7 +60,11 @@ export default {
       let payOpenId = sessionStorage.getItem('payOpenId')
       para.isInitCode = (!payOpenId || payOpenId === '') ? null : '1'
       para.openCode = para.code
-      para.payOpenId = payOpenId
+      if (para.model === 'FT') {
+        para.payOpenId = para.openid
+      } else {
+        para.payOpenId = payOpenId
+      }
       initMemProduct(para).then((res) => {
         if (res.status === 200) {
           this.productList = res.data.productList

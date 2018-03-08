@@ -90,7 +90,7 @@ export default {
         mid: String(payData.mid),
         eid: String(payData.eId),
         sid: String(payData.storeId),
-        oid: String(payData.payOpenId),
+        oid: String(sessionStorage.getItem('payOpenId')),
         cardCode: '',
         cardId: '',
         cardOpenId: String(payData.cardOpenId),
