@@ -47,6 +47,9 @@ export default {
   },
   created () {
     this.Initialization()
+    window.addEventListener('popstate', function (e) {
+      self.location.reload()
+    }, false)
   },
   methods: {
     buyClick (data) {
@@ -69,6 +72,7 @@ export default {
       initMemProduct(para).then((res) => {
         if (res.status === 200) {
           this.productList = res.data.productList
+          window.document.title = res.data.malias
           sessionStorage.setItem('payData', JSON.stringify(res.data))
           sessionStorage.setItem('payOpenId', res.data.payOpenId)
         }
