@@ -12,6 +12,7 @@ const Payment = () => import('@/views/Payment')
 const Order = () => import('@/views/Order')
 const Introduce = () => import('@/views/Introduce')
 const Complete = () => import('@/views/Complete')
+const Weixin = () => import('@/views/Weixin')
 
 Vue.use(Router)
 
@@ -51,6 +52,12 @@ export default new Router({
       path: '/complete',
       name: '完成',
       component: Complete,
+      meta: { navShow: false, headerShow: false }
+    },
+    {
+      path: '/weixin',
+      name: '正在登录',
+      component: Weixin,
       meta: { navShow: false, headerShow: false }
     }
   ]

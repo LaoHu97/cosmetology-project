@@ -57,3 +57,5 @@ export const getMerIntroductionByMId = params => { return axios.post(`${base}/pa
 export const receiveCardAfter = params => { return axios.post(`${base}/pay/activity/receiveCardAfter`, params).then(res => res.data) }
 
 export const addCardConfig = params => { return axios.post(`${base}/pay/activity/addCardConfig`, params).then(res => res.data) }
+
+export const sendWx = params => { return axios.post(`${base}/pay/activity/sendWx`, params).then(res => res.data) }

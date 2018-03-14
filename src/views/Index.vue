@@ -57,6 +57,7 @@ export default {
     },
     Initialization () {
       let para = querystring.parse()
+      console.log(para)
       let payOpenId = sessionStorage.getItem('payOpenId')
       para.isInitCode = (!payOpenId || payOpenId === '') ? null : '1'
       para.openCode = para.code
@@ -126,7 +127,6 @@ a {
 }
 .box_top_r{
   display: inline;
-  float: right;
 }
 .box_top_r h1{
   display: inline;
