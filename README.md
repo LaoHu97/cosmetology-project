@@ -1,5 +1,7 @@
 # cosmetology-project
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/LaoHu97/cosmetology-project.svg)](https://greenkeeper.io/)
+
 > A Vue.js project
 
 ## Build Setup
